@@ -1,0 +1,99 @@
+#IMPORTANTE: Editar los DNSs que se quieran en la variable SAN:
+
+SAN = DNS:aws.ldts.es, DNS:www.aws.ldts.es
+
+subjectAltName = $ENV::SAN
+
+
+[ req ]
+default_bits       = 2048
+distinguished_name = req_distinguished_name
+req_extensions     = req_ext
+
+[ req_distinguished_name ]
+countryName                 = Country Name (2 letter code)
+stateOrProvinceName         = State or Province Name (full name)
+localityName               = Locality Name (eg, city)
+organizationName           = Organization Name (eg, company)
+commonName                 = Common Name (e.g. server FQDN or YOUR name)
+
+[ v3_ca ]
+basicConstraints = CA:FALSE
+keyUsage = digitalSignature, keyEncipherment
+subjectAltName = $ENV::SAN
+
+
+#[ req_ext ]
+#subjectAltName = @alt_names
+#[alt_names]
+#DNS.1   = bestflare.com
+#DNS.2   = usefulread.com
+#DNS.3   = chandank.com
+
+########################
+
+
+[ server ]
+
+# Make a cert with nsCertType=server
+basicConstraints                = CA:FALSE
+nsCertType                      = server
+keyUsage                        = digitalSignature, keyEncipherment
+nsComment                       = "OpenSSL Generated Server Certificate"
+subjectKeyIdentifier            = hash
+authorityKeyIdentifier          = keyid,issuer:always
+extendedKeyUsage                = serverAuth,1.3.6.1.5.5.8.2.2
+
+[ server_san ]
+
+# copy of [ server ] plus nonempty Subject Alternative Names
+basicConstraints                = CA:FALSE
+nsCertType                      = server
+keyUsage                        = digitalSignature, keyEncipherment
+nsComment                       = "OpenSSL Generated Server Certificate"
+subjectKeyIdentifier            = hash
+authorityKeyIdentifier          = keyid,issuer:always
+extendedKeyUsage                = serverAuth,1.3.6.1.5.5.8.2.2
+subjectAltName                  = $ENV::SAN
+
+[ req_server ]
+
+# Copy of [ server ] for CSR
+basicConstraints                = CA:FALSE
+nsCertType                      = server
+keyUsage                        = digitalSignature, keyEncipherment
+nsComment                       = "OpenSSL Generated Server Certificate"
+subjectKeyIdentifier            = hash
+extendedKeyUsage                = serverAuth,1.3.6.1.5.5.8.2.2
+
+[ req_server_san ]
+
+# Copy of [ server_san ] for CSR
+basicConstraints                = CA:FALSE
+nsCertType                      = server
+keyUsage                        = digitalSignature, keyEncipherment
+nsComment                       = "OpenSSL Generated Server Certificate"
+subjectKeyIdentifier            = hash
+extendedKeyUsage                = serverAuth,1.3.6.1.5.5.8.2.2
+subjectAltName                  = $ENV::SAN
+
+[ usr_cert ]
+
+basicConstraints                = CA:FALSE
+keyUsage                        = nonRepudiation, digitalSignature, keyEncipherment
+nsComment                       = "OpenSSL Generated User Certificate"
+subjectKeyIdentifier            = hash
+authorityKeyIdentifier          = keyid,issuer:always
+extendedKeyUsage                = clientAuth
+
+[ usr_cert_san ]
+
+# copy of [ usr_cert ] plus nonempty Subject Alternative Names
+basicConstraints                = CA:FALSE
+keyUsage                        = nonRepudiation, digitalSignature, keyEncipherment
+nsComment                       = "OpenSSL Generated User Certificate"
+subjectKeyIdentifier            = hash
+authorityKeyIdentifier          = keyid,issuer:always
+extendedKeyUsage                = clientAuth
+subjectAltName                  = $ENV::SAN
+

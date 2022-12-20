@@ -1,0 +1,10 @@
+#Usar: -extensions v3_ca -extfile X509V3ext.cnf
+
+SAN = DNS:aws.ldts.es, DNS:www.aws.ldts.es
+
+[ v3_ca ]
+basicConstraints = CA:FALSE
+keyUsage = digitalSignature, keyEncipherment
+subjectAltName = $ENV::SAN
+
+
